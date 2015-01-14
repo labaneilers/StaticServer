@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww", "StaticWww\StaticWww.csproj", "{E4268858-59A1-4C47-8636-925DDF2EFB80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww.Tests", "StaticWww.Tests\StaticWww.Tests.csproj", "{3C1353AC-AE16-491D-B2A4-C6ED67FCECFF}"
@@ -13,6 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C1353AC-AE16-491D-B2A4-C6ED67FCECFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C1353AC-AE16-491D-B2A4-C6ED67FCECFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C1353AC-AE16-491D-B2A4-C6ED67FCECFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -21,10 +27,9 @@ Global
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = StaticWww\StaticWww.csproj
