@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Web;
-using System.Web.UI;
-using System.IO;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Web;
 using StaticWww.Models;
 
-namespace StaticWww
+namespace StaticWww.Pages
 {
 	
 	public partial class ImageSrv : System.Web.UI.Page
@@ -44,7 +43,7 @@ namespace StaticWww
 			var destRect = new Rectangle(0, 0, qs.Width, qs.Height);
 
 			// Determine the natural size of the image
-			using (var sourceImage = System.Drawing.Image.FromFile(physicalPath))
+			using (var sourceImage = Image.FromFile(physicalPath))
 			{
 				var naturalSize = sourceImage.Size;
 
