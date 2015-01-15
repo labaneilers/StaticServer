@@ -1,181 +1,192 @@
 using System;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Drawing.Imaging;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
-using VP.VPSystem.IO;
+using System.IO;
 
-
-// http://libpng.nigilist.ru/pub/png/spec/1.2/PNG-Contents.html
-
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
-    internal abstract class PngWriter
+    public static class PngWriter
     {
-        protected BinaryWriter _writer;
-        protected Bitmap _bitmap;
-        protected int _paletteBitDepth;
-        internal ColorType _colorType;
-        internal PngFilterType _filterType;
-
-        internal enum ColorType
+        /// <summary>
+        /// Writes a 32 bit PNG with alpha to the specified stream
+        /// </summary>
+        public static void WritePng(Image image, Stream outputStream)
         {
-            GrayScale = 0,
-            RGB = 2,
-            Palette = 3,
-            GrayscaleAlpha = 4,
-            RGBA = 6
+            WritePng(image, outputStream, null);
         }
 
-        internal PngWriter(Bitmap bitmap, Stream outputStream, ColorType colorType, PngFilterType filterType)
+        /// <summary>
+        /// Writes a 32 bit PNG with alpha to the specified stream
+        /// </summary>
+        /// <param name="image">The bitmap.</param>
+        /// <param name="outputStream">The output stream.</param>
+        /// <param name="options">if set to <c>true</c> [use expensive optimizations].</param>
+        public static void WritePng(Image image, Stream outputStream, PngOptimizationOptions options)
         {
-            _bitmap = bitmap;
-            _writer = new BinaryWriter(outputStream);
-            _colorType = colorType;
-            _filterType = filterType;
+            // A reasonable default
+            options = options ?? new PngOptimizationOptions {FilterType = PngFilterType.None};
 
-            switch (filterType)
+            if (options.PaletteSize > 0)
             {
-                case PngFilterType.None:
-                case PngFilterType.Sub:
-                    break;
-                default:
-                    throw new System.Exception(String.Format("Png24Writer: Unsupported filter {0}", filterType));
+                WritePng8(image, outputStream, options);
+                return;
+            }
+
+            if (options.FilterType.HasValue)
+            {
+                WritePng(image, outputStream, options.FilterType.Value);
+                return;
+            }
+
+            //Bake-off
+            // Sub vs None precompression
+            var subStream = new ChunkedMemoryStream();
+            WritePng(image, subStream, PngFilterType.Sub);
+
+            var noneStream = new ChunkedMemoryStream();
+            WritePng(image, noneStream, PngFilterType.None);
+
+            if (subStream.Length < noneStream.Length)
+            {
+                subStream.WriteTo(outputStream);
+            }
+            else
+            {
+                noneStream.WriteTo(outputStream);
             }
         }
 
-        internal void Write()
+        /// <summary>
+        /// Write a PNG file to the specified stream with the specified pre-compression filter
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="outputStream"></param>
+        /// <param name="filterType">The pre-compression filter type to use</param>
+        internal static void WritePng(Image image, Stream outputStream, PngFilterType filterType)
         {
-            WriteSignature();
-            WriteHeader();
-            WritePalette();
-            WriteTransparency();
-            WriteBitmapData();
-            WriteFooter();
-
-            _writer.Flush();
-        }
-
-        private void WriteBitmapData()
-        {
-            var memoryStream = new ChunkedMemoryStream();
-            var defl = new ICSharpCode.SharpZipLib.Zip.Compression.Deflater(5);
-            var compressionStream = new DeflaterOutputStream(memoryStream, defl);
-            WriteBitmapData(compressionStream);
-            compressionStream.Finish();
-
-            // unrolled writedatachunk ...
-            uint length = (uint)memoryStream.Length;
-            var chunkType = CHUNK_TYPE_DATA;
-            _writer.Write(ToBytes(length));
-            _writer.Write(chunkType);
-            if (length > 0)
+            using (var bmp = new DisposableBitmapWrapper(image))
             {
-                memoryStream.WriteTo(_writer.BaseStream);
+                var writer = new Png24Writer(bmp.Bitmap, outputStream, filterType);
+                writer.Write();
             }
-            _writer.Write(ToBytes(PngCrc.ComputeCrc(chunkType, memoryStream)));
         }
 
-        unsafe protected void WriteScanline(DeflaterOutputStream compressionStream, byte[] scanline, int bytesPerPixel)
+        /// <summary>
+        /// Writes a 8 bit, quantized PNG image to the specified stream.
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="outputStream"></param>
+        public static void WritePng8(Image image, Stream outputStream)
         {
-            int len = scanline.Length;
-            
-            // filter
-            if (_filterType == PngFilterType.Sub)
+            WritePng8(image, outputStream, new PngOptimizationOptions { FilterType = PngFilterType.None, PaletteSize = 255 } );
+        }
+
+        /// <summary>
+        /// Writes a 8 bit, quantized PNG image to the specified stream.
+        /// </summary>
+        /// <param name="image">The bitmap.</param>
+        /// <param name="outputStream">The output stream.</param>
+        /// <param name="options">if set to <c>true</c> [use expensive optimizations].</param>
+        public static void WritePng8(Image image, Stream outputStream, PngOptimizationOptions options)
+        {
+            var quantizer = new ImageManipulation.HextreeQuantizer(options.PaletteSize, 8);
+            using (Bitmap quantized = quantizer.Quantize(image))
             {
-                fixed (byte* bmp = scanline)
+                if (!options.FilterType.HasValue)
                 {
-                    for (int i = len - 1; i > bytesPerPixel - 1; i -= bytesPerPixel)
+                    var subStream = new ChunkedMemoryStream();
+                    WritePng8PreQuantized(quantized, subStream, quantizer.ActualPaletteSize, PngFilterType.Sub);
+
+                    var noneStream = new ChunkedMemoryStream();
+                    WritePng8PreQuantized(quantized, noneStream, quantizer.ActualPaletteSize, PngFilterType.None);
+
+                    if (subStream.Length > noneStream.Length)
                     {
-                        //Sub(x) = Raw(x) - Raw(x-bpp)
-                        for (int j = 0; j < bytesPerPixel; j++)
-                        {
-                            bmp[i - j] -= bmp[i - j - bytesPerPixel];
-                        }
+                        noneStream.WriteTo(outputStream);
                     }
+                    else
+                    {
+                        subStream.WriteTo(outputStream);
+                    }
+                }
+                else
+                {
+                    WritePng8PreQuantized(quantized, outputStream, quantizer.ActualPaletteSize, options.FilterType.Value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write a PNG-8 file to the specified stream.
+        /// </summary>
+        /// <param name="image">The GDI+ bitmap to write.  This PixelFormat for this image must be 8bppIndexed.
+        /// Use the image quantizier in 3rd Party/Microsoft/ImageManipulation to convert 24-bit images down to indexed color.</param>
+        /// <param name="outputStream">The stream to write the image to.  As of now, this can be a forward-only stream.</param>
+        /// <param name="paletteSize">The number of palette colors to use.  GDI+ doesn't support all of the bit depths
+        /// for indexed-color images that PNG supports.  If you set this value, you can reduce the size of the PNG, but any
+        /// colors beyond paletteSize will not be shown correctly.</param>
+        /// <param name="filterType">Type of the filter.</param>
+        internal static void WritePng8PreQuantized(Image image, Stream outputStream, int paletteSize, PngFilterType filterType)
+        {
+            using (var bmp = new DisposableBitmapWrapper(image))
+            {
+                var writer = new Png8Writer(bmp.Bitmap, outputStream, paletteSize, filterType);
+                writer.Write();
+            }
+        }
+
+        /// <summary>
+        /// Utility to wrap a function argument that is an Image
+        /// If it needs to allocate a bitmap, it also destroys it on Dispose.
+        /// If not, it doesn't.
+        /// </summary>
+        private class DisposableBitmapWrapper : IDisposable
+        {
+            public DisposableBitmapWrapper(Image image)
+            {
+                this.Bitmap = image as Bitmap;
+
+                if (this.Bitmap == null)
+                {
+                    _needsDisposing = true;
+                    this.Bitmap = new Bitmap(image);
                 }
             }
 
-            compressionStream.WriteByte((byte)_filterType);
-            compressionStream.Write(scanline, 0, len);
-        }
+            public Bitmap Bitmap { get; private set; }
 
-        protected abstract void WriteBitmapData(DeflaterOutputStream compressionStream);
+            private readonly bool _needsDisposing;
 
-        protected static byte[] CHUNK_TYPE_PALETTE = ASCIIEncoding.ASCII.GetBytes("PLTE");
-        protected virtual void WritePalette() { }
-
-        protected static byte[] CHUNK_TYPE_TRANSPARENCY = ASCIIEncoding.ASCII.GetBytes("tRNS");        
-        protected virtual void WriteTransparency() { }
-
-        private static byte[] SIGNATURE = { 137, 80, 78, 71, 13, 10, 26, 10 };
-        private void WriteSignature()
-        {
-            _writer.Write(SIGNATURE);
-        }
-
-        private static byte[] CHUNK_TYPE_FOOTER = ASCIIEncoding.ASCII.GetBytes("IEND");
-        private static byte[] FOOTER_DATA = { };
-        private void WriteFooter()
-        {
-            WriteChunk(CHUNK_TYPE_FOOTER, FOOTER_DATA);
-        }
-
-        private static byte[] CHUNK_TYPE_HEADER = ASCIIEncoding.ASCII.GetBytes("IHDR");
-        private void WriteHeader()
-        {
-            MemoryStream header = new MemoryStream(13);
-            header.Write(ToBytes(_bitmap.Width), 0, 4);
-            header.Write(ToBytes(_bitmap.Height), 0, 4);
-            header.WriteByte((byte)_paletteBitDepth); // bit depth
-            header.WriteByte((byte)_colorType); 
-            header.WriteByte(0); // Compression; must be zero
-            header.WriteByte(0); // Interlace method
-            WriteChunk(CHUNK_TYPE_HEADER, header.GetBuffer());
-        }
-
-        private static byte[] CHUNK_TYPE_DATA = ASCIIEncoding.ASCII.GetBytes("IDAT");
-        protected void WriteDataChunk(byte[] data, int length)
-        {
-            WriteChunk(CHUNK_TYPE_DATA, data, length);
-        }
-
-        protected void WriteChunk(byte[] chunkType, byte[] data)
-        {
-            WriteChunk(chunkType, data, data.Length);
-        }
-
-        private void WriteChunk(byte[] chunkType, byte[] data, int length)
-        {
-            _writer.Write(ToBytes((uint)length));
-            _writer.Write(chunkType);
-            if (length > 0)
+            public void Dispose()
             {
-                _writer.Write(data, 0, length);
+                if (_needsDisposing)
+                {
+                    this.Bitmap.Dispose();
+                }
             }
-            _writer.Write(ToBytes(PngCrc.ComputeCrc(chunkType, data, length)));
         }
 
-        private static byte[] ToBytes(uint i)
+        /// <summary>
+        /// Determines if the specified image contains any transparent or semi-transparent pixels.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <returns></returns>
+        public static bool ImageContainsTransparency(Image image)
         {
-            byte[] bytes = BitConverter.GetBytes(i);
-            if (BitConverter.IsLittleEndian)
+            if (Image.IsAlphaPixelFormat(image.PixelFormat))
             {
-                Array.Reverse(bytes);
+                return true;
             }
-            return bytes;
-        }
 
-        private static byte[] ToBytes(int i)
-        {
-            byte[] bytes = BitConverter.GetBytes(i);
-            if (BitConverter.IsLittleEndian)
+            if (image.PixelFormat == PixelFormat.Format8bppIndexed)
             {
-                Array.Reverse(bytes);
+                if ((image.Palette.Flags & 0x00000001) != 0) //contains alpha
+                {
+                    return true;
+                }
             }
-            return bytes;
-        }
 
+            return false;
+        }
     }
 }

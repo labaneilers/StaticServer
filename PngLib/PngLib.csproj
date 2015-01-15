@@ -41,11 +41,11 @@
     <Compile Include="Png24Writer.cs" />
     <Compile Include="Png8Writer.cs" />
     <Compile Include="PngCrc.cs" />
-    <Compile Include="PngWriter.cs" />
+    <Compile Include="PngWriterInternal.cs" />
     <Compile Include="ChunkedMemoryStream.cs" />
     <Compile Include="PngFilterType.cs" />
     <Compile Include="PngOptimizationOptions.cs" />
-    <Compile Include="ImageWriter.cs" />
+    <Compile Include="PngWriter.cs" />
     <Compile Include="ImageManipulations.cs" />
   </ItemGroup>
   <ItemGroup>

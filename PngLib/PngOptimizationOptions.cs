@@ -1,4 +1,4 @@
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
     /// <summary>
     /// Describes options for PNG optimization
@@ -12,7 +12,7 @@ namespace VP.VPSystem.Drawing
 
         /// <summary>
         /// The type of pre-compression filter to use.
-        /// If null, the PNG rendering code in VP.VPSystem.Drawing will guess the best option (expensive).
+        /// If null, the PNG rendering code in PngLib will guess the best option (expensive).
         /// The default is usually PngFilterType.None
         /// </summary>
         public PngFilterType? FilterType { get; set; }

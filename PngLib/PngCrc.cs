@@ -1,7 +1,6 @@
-using System;
 using System.IO;
 
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
     /// <summary>
     /// Class for computing CRC's of Png chunks.
@@ -33,7 +32,7 @@ namespace VP.VPSystem.Drawing
             crc = UpdateCrc(crc, chunkType, chunkType.Length);
 
             data.Seek(0, SeekOrigin.Begin);
-            int read = 0;
+            int read;
             var buffer = new byte[4096];
             while ((read = data.Read(buffer, 0, buffer.Length)) > 0)
             {

@@ -2,11 +2,11 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
     public static class ImageManipulations
     {
-        public static Bitmap CreateThumbnail(this System.Drawing.Image inputImg, int thumbnailSquareSize)
+        public static Bitmap CreateThumbnail(this Image inputImg, int thumbnailSquareSize)
         {
             // if thumbnail size is invalid, set to 100x100
             thumbnailSquareSize = thumbnailSquareSize <= 0 ? 100 : thumbnailSquareSize;
@@ -18,7 +18,7 @@ namespace VP.VPSystem.Drawing
                                 ? thumbnailSquareSize
                                 : (int)(((double)inputImg.Height / inputImg.Width) * thumbnailSquareSize);
 
-            Bitmap thumbnailImage = new Bitmap(thumbnailSquareSize, thumbnailSquareSize);
+            var thumbnailImage = new Bitmap(thumbnailSquareSize, thumbnailSquareSize);
 
             using (Graphics graphics = Graphics.FromImage(thumbnailImage))
             {
@@ -35,7 +35,7 @@ namespace VP.VPSystem.Drawing
             return thumbnailImage;
         }
 
-        public static Bitmap CropImage(this System.Drawing.Image inputImg, int top, int right, int bottom, int left)
+        public static Bitmap CropImage(this Image inputImg, int top, int right, int bottom, int left)
         {
             int newWidth = inputImg.Width - left - right,
                 newHeight = inputImg.Height - top - bottom;
@@ -46,7 +46,7 @@ namespace VP.VPSystem.Drawing
                 return (Bitmap)inputImg;
             }
 
-            Bitmap croppedImage = new Bitmap(newWidth, newHeight);
+            var croppedImage = new Bitmap(newWidth, newHeight);
 
             using (Graphics graphics = Graphics.FromImage(croppedImage))
             {
@@ -60,17 +60,17 @@ namespace VP.VPSystem.Drawing
             return croppedImage;
         }
 
-        public static Bitmap ScaleImage(this System.Drawing.Image inputImg, double scaleX, double scaleY)
+        public static Bitmap ScaleImage(this Image inputImg, double scaleX, double scaleY)
         {
-            Bitmap outImage = new Bitmap((int)(inputImg.Width * scaleX), (int)(inputImg.Height * scaleY));
+            var outImage = new Bitmap((int)(inputImg.Width * scaleX), (int)(inputImg.Height * scaleY));
 
             using (Graphics g = Graphics.FromImage(outImage))
             {
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.SmoothingMode = SmoothingMode.HighQuality;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
                 //Transformation matrix
-                var m = new System.Drawing.Drawing2D.Matrix();
+                var m = new Matrix();
                 m.Scale((float)scaleX, (float)scaleY);
                 //m.Translate((float)scaleX, (float)scaleY);
 
@@ -80,7 +80,7 @@ namespace VP.VPSystem.Drawing
             return outImage;
         }
 
-        public static Bitmap RotateImage(this System.Drawing.Image inputImg, double degreeAngle)
+        public static Bitmap RotateImage(this Image inputImg, double degreeAngle)
         {
             //Corners of the image
             PointF[] rotationPoints = { new PointF(0, 0),
@@ -96,15 +96,15 @@ namespace VP.VPSystem.Drawing
             Rectangle bounds = PointMath.GetBounds(rotationPoints);
 
             //An empy bitmap to draw the rotated image
-            Bitmap rotatedBitmap = new Bitmap(bounds.Width, bounds.Height);
+            var rotatedBitmap = new Bitmap(bounds.Width, bounds.Height);
 
             using (Graphics g = Graphics.FromImage(rotatedBitmap))
             {
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.SmoothingMode = SmoothingMode.HighQuality;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
                 //Transformation matrix
-                var m = new System.Drawing.Drawing2D.Matrix();
+                var m = new Matrix();
                 m.RotateAt((float)degreeAngle, new PointF(inputImg.Width / 2.0f, inputImg.Height / 2.0f));
                 m.Translate(-bounds.Left, -bounds.Top, MatrixOrder.Append); //shift to compensate for the rotation
 
@@ -129,7 +129,7 @@ namespace VP.VPSystem.Drawing
             {
                 double radAngle = DegreeToRadian(degreeAngle);
 
-                PointF newPoint = new PointF();
+                var newPoint = new PointF();
 
                 double deltaX = pnt.X - origin.X;
                 double deltaY = pnt.Y - origin.Y;
@@ -187,8 +187,8 @@ namespace VP.VPSystem.Drawing
 
                 return new RectangleF(left,
                                       top,
-                                     (float)Math.Abs(right - left),
-                                     (float)Math.Abs(bottom - top));
+                                     Math.Abs(right - left),
+                                     Math.Abs(bottom - top));
             }
         }
     }

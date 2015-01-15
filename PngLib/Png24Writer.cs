@@ -6,13 +6,13 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 // http://libpng.nigilist.ru/pub/png/spec/1.2/PNG-Contents.html
 
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
     /// <summary>
     /// Class that can output a PNG-24 file from a GDI+ bitmap.
     /// This outputs smaller PNGs because it performs "precompression"
     /// </summary>
-    internal class Png24Writer : PngWriter
+    internal class Png24Writer : PngWriterInternal
     {
         /// <summary>
         /// This is a single-use class, 
@@ -31,13 +31,13 @@ namespace VP.VPSystem.Drawing
                     _bytesPerPixel = 3;
                     break;
                 default:
-                    throw new System.Exception(String.Format("Png24Writer: Unsupported pixel format {0}", bitmap.PixelFormat));
+                    throw new Exception(String.Format("Png24Writer: Unsupported pixel format {0}", bitmap.PixelFormat));
             }
 
             _paletteBitDepth = 8;
         }
 
-        private int _bytesPerPixel;
+        private readonly int _bytesPerPixel;
 
         unsafe protected override void WriteBitmapData(DeflaterOutputStream compressionStream)
         {
@@ -49,12 +49,12 @@ namespace VP.VPSystem.Drawing
 
                 bitmapData = _bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, _bitmap.PixelFormat);
 
-                byte[] rgbValues = new byte[bitmapData.Width * _bytesPerPixel];
+                var rgbValues = new byte[bitmapData.Width * _bytesPerPixel];
                 int len = rgbValues.Length;
 
                 for (int y = 0; y < height; y++)
                 {
-                    IntPtr row = new IntPtr((byte*)bitmapData.Scan0 + (y * bitmapData.Stride));
+                    var row = new IntPtr((byte*)bitmapData.Scan0 + (y * bitmapData.Stride));
                     System.Runtime.InteropServices.Marshal.Copy(row, rgbValues, 0, len);
 
                     fixed (byte* bmp = rgbValues)

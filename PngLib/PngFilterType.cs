@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace VP.VPSystem.Drawing
+﻿
+namespace PngLib
 {
     /// <summary>
     /// Describes PNG pre-compression filters.

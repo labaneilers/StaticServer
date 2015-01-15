@@ -11,8 +11,8 @@ namespace StaticWww
 
             routes.MapRoute(
                 name: "PrefixedRoute",
-                url: "vpstatic/{controller}/{action}",
-                defaults: new { controller = "Home", action = "Index" }
+                url: "vpstatic/{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

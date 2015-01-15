@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <NuGetPackageImportStamp>06330e1d</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -106,21 +107,15 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\ResponsiveImageModelBinder.cs" />
     <Compile Include="Helpers\ImageWriterResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ImageRenderer.cs" />
-    <Compile Include="Models\ResponsiveImageQueryString.cs" />
+    <Compile Include="Models\ResponsiveImageModel.cs" />
     <Compile Include="Helpers\NameValueCollectionExtensions.cs" />
     <Compile Include="Helpers\ConvertExtensions.cs" />
-    <Compile Include="Pages\ImageSrv.aspx.cs">
-      <DependentUpon>ImageSrv.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\ImageSrv.aspx.designer.cs">
-      <DependentUpon>ImageSrv.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="StaticFiles\lips.png" />
@@ -132,7 +127,6 @@
     <Content Include="Web.config" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
-    <Content Include="Pages\ImageSrv.aspx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -152,7 +146,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50822/</IISUrl>
+          <IISUrl>http://localhost:57291/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -170,4 +164,20 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+
+  <ItemGroup>
+    <Reference Include="FreeImageNET">
+      <HintPath>..\packages\VVVV.FreeImage.3.15.1.1\build\net40\lib\FreeImageNET.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="BeforeBuild">
+    <ItemGroup>
+      <FreeImageBins Include="..\packages\VVVV.FreeImage.3.15.1.1\build\net40\freeimage\x64\*.dll" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(FreeImageBins)" DestinationFolder="$(OutputPath)" ContinueOnError="true" SkipUnchangedFiles="true"/>
+  </Target>
+
 </Project>

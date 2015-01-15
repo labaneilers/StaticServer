@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 
-namespace VP.VPSystem.IO
+namespace PngLib
 {
     public class ChunkedMemoryStream : Stream
     {
-        //private bool _closed;
         private MemoryChunk _chunks;
         private MemoryChunk _readChunk;
         private int _readOffset;
@@ -16,9 +15,11 @@ namespace VP.VPSystem.IO
 
         private MemoryChunk AllocateMemoryChunk()
         {
-            MemoryChunk chunk = new MemoryChunk();
-            chunk.Buffer = new byte[64 * 1024];
-            chunk.Next = null;
+            var chunk = new MemoryChunk
+            {
+                Buffer = new byte[64 * 1024],
+                Next = null
+            };
             return chunk;
         }
 

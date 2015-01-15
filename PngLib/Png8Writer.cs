@@ -4,16 +4,16 @@ using System.Drawing.Imaging;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-namespace VP.VPSystem.Drawing
+namespace PngLib
 {
     /// <summary>
     /// Class that can output a PNG-8 file from a GDI+ bitmap.
     /// .Net Framework (2.0) only supports writing 24-bit PNG files.
     /// </summary>
-    internal class Png8Writer : PngWriter
+    internal class Png8Writer : PngWriterInternal
     {
         private int _maxTransparentPaletteIndex = -1;
-        private int _paletteSize;
+        private readonly int _paletteSize;
 
         /// <summary>
         /// This is a single-use class, 
@@ -28,13 +28,13 @@ namespace VP.VPSystem.Drawing
                 case PixelFormat.Format1bppIndexed:
                     break;
                 default:
-                    throw new System.Exception(String.Format("Png24Writer: Unsupported pixel format {0}", bitmap.PixelFormat));
+                    throw new Exception(String.Format("Png24Writer: Unsupported pixel format {0}", bitmap.PixelFormat));
             }
 
             _paletteSize = paletteSize;
             if (_paletteSize < 0 || _paletteSize > 256)
             {
-                throw new System.ArgumentException(String.Format("Invalid paletteSize {0}", paletteSize));
+                throw new ArgumentException(String.Format("Invalid paletteSize {0}", paletteSize));
             }
 
             if (_paletteSize <= 2)
@@ -65,7 +65,7 @@ namespace VP.VPSystem.Drawing
                 return;
             }
 
-            byte[] data = new byte[_maxTransparentPaletteIndex + 1];
+            var data = new byte[_maxTransparentPaletteIndex + 1];
             ColorPalette palette = _bitmap.Palette;
             for (int colorIndex = 0; colorIndex <= _maxTransparentPaletteIndex; colorIndex++)
             {
@@ -80,7 +80,7 @@ namespace VP.VPSystem.Drawing
             _maxTransparentPaletteIndex = -1;
 
             ColorPalette palette = _bitmap.Palette;
-            byte[] data = new byte[_paletteSize * 3];
+            var data = new byte[_paletteSize * 3];
             for (int colorIndex = 0; colorIndex < _paletteSize; colorIndex++)
             {
                 Color entry = palette.Entries[colorIndex];
@@ -104,13 +104,13 @@ namespace VP.VPSystem.Drawing
                 int increment = 8 / _paletteBitDepth;
                 int width = _bitmap.Width;
                 int height = _bitmap.Height;
-                int rowSize = (int)Math.Ceiling(width / (double)increment);
+                var rowSize = (int)Math.Ceiling(width / (double)increment);
 
                 bitmapData = _bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
 
                 for (int y = 0; y < height; y++)
                 {
-                    byte[] rowData = new byte[rowSize];
+                    var rowData = new byte[rowSize];
                     byte* row = (byte*)bitmapData.Scan0 + (y * bitmapData.Stride);
                     for (int x = 0, rowDataOffset = 0; x < width; x += increment, rowDataOffset++)
                     {
