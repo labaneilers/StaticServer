@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace MVC5.Controllers
+namespace StaticWww.Controllers
 {
     public class ErrorController : Controller
     {

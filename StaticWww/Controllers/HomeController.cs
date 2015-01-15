@@ -1,29 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
 using System.Web.Mvc;
-using System.Web.Mvc.Ajax;
+using StaticWww.Models;
 
 namespace StaticWww.Controllers
 {
-	public class HomeController : Controller
-	{
-		public ActionResult Index()
-		{
-			var mvcName = typeof(Controller).Assembly.GetName();
-			//var isMono = Type.GetType("Mono.Runtime") != null;
+    public class ImageWriterResult : ActionResult
+    {
+        private readonly Action<Stream> _write;
 
-			ViewData["Version"] = mvcName.Version.Major + "." + mvcName.Version.Minor;
-			ViewData["Runtime"] = typeof(System.Drawing.Bitmap).Assembly.Location;
+        public ImageWriterResult(Action<Stream> write)
+        {
+            _write = write;
+        }
 
-			string physicalPath = Server.MapPath("/StaticFiles/lips.png");
-			using (var sourceImage = System.Drawing.Image.FromFile(physicalPath))
-			{
-			}
+        public override void ExecuteResult(ControllerContext context)
+        {
+            _write(context.HttpContext.Response.OutputStream);
+        }
+    }
 
-			return View();
-		}
-	}
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Image()
+        {
+             var renderer = new ImageRenderer
+		    {
+		        MapPath = Server.MapPath
+		    };
+
+		    var qs = new ResponsiveImageQueryString(this.HttpContext.Request.QueryString);
+
+            renderer.SetResponseHeaders(this.HttpContext, false, true);
+
+            return new ImageWriterResult(stream => renderer.WriteImage(qs, stream));
+        }
+    }
 }
-
