@@ -6,7 +6,7 @@ using System.Text;
 using System.Globalization;
 using System.Linq;
 
-namespace VPSystem
+namespace StaticWww.Helpers
 {
     /// <summary>
     /// Extensions to NameValueCollection

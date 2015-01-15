@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 
-namespace VPSystem
+namespace StaticWww.Helpers
 {
     /// <summary>
     /// Holds extensions for the System.Convert class

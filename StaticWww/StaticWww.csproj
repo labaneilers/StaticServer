@@ -104,14 +104,16 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Helpers\ImageWriterResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ImageRenderer.cs" />
     <Compile Include="Models\ResponsiveImageQueryString.cs" />
-    <Compile Include="VPSystem\NameValueCollectionExtensions.cs" />
-    <Compile Include="VPSystem\ConvertExtensions.cs" />
+    <Compile Include="Helpers\NameValueCollectionExtensions.cs" />
+    <Compile Include="Helpers\ConvertExtensions.cs" />
     <Compile Include="Pages\ImageSrv.aspx.cs">
       <DependentUpon>ImageSrv.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

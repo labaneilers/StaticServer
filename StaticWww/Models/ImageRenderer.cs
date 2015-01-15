@@ -76,7 +76,7 @@ namespace StaticWww.Models
                         VP.VPSystem.Drawing.ImageWriter.WritePng(outputBitmap, stream, new VP.VPSystem.Drawing.PngOptimizationOptions() { PaletteSize = qs.PngColors });
                         //outputBitmap.Save(stream, ImageFormat.Png);
                     }
-                    else
+                    else if (isJpeg)
                     {
                         ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
                         var encoderParameters = new EncoderParameters(1);
@@ -84,6 +84,10 @@ namespace StaticWww.Models
                         encoderParameters.Param[0] = encoderParameter;
 
                         outputBitmap.Save(stream, jgpEncoder, encoderParameters);
+                    }
+                    else
+                    {
+                        throw new Exception("No image format specified");
                     }
                 }
             }
