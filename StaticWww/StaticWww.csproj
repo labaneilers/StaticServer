@@ -121,6 +121,7 @@
     <Content Include="Web.config" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="Test.aspx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
