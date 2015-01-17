@@ -164,7 +164,7 @@
       <HintPath>..\packages\VVVV.FreeImage.3.15.1.1\build\net40\lib\FreeImageNET.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Target Name="BeforeBuild">
+  <Target Name="BeforeBuild2">
     <ItemGroup>
       <FreeImageBins Include="..\packages\VVVV.FreeImage.3.15.1.1\build\net40\freeimage\x64\*.dll" />
     </ItemGroup>

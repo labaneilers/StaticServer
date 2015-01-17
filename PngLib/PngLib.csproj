@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImageManipulation\ImageManipulation.csproj">
-      <Project>{07decdcf-c7d5-407a-8bf4-2d1187b47a27}</Project>
+      <Project>{07DECDCF-C7D5-407A-8BF4-2D1187B47A27}</Project>
       <Name>ImageManipulation</Name>
     </ProjectReference>
   </ItemGroup>
