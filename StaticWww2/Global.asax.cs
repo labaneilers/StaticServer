@@ -34,7 +34,7 @@ namespace StaticWww2
 
 		protected void Application_Start()
 		{
-			AreaRegistration.RegisterAllAreas();
+			//AreaRegistration.RegisterAllAreas();
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
 		}
