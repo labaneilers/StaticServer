@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
-using FreeImageAPI;
+//using FreeImageAPI;
 
 namespace StaticWww.Models
 {
@@ -90,37 +90,37 @@ namespace StaticWww.Models
                     }
                     else if (isJpeg)
                     {
-                        if (this.UseFreeImage)
-                        {
-                            // Use FreeImage.NET to encode jpegs
-                            // This invokes unmanaged code, but has been used in production already, so is less risky.
-
-                            // Turn off chroma subsampling (set ratio 4:4:4)
-                            // This is the magic flag that makes flat color areas look good.
-                            // Without it, you get compression artifacts that look especially bad in flat color areas and text.
-                            var flags = FREE_IMAGE_SAVE_FLAGS.JPEG_SUBSAMPLING_444;
-
-                            // Not sure why you wouldn't want to optimize, but this reduces the size significantly without
-                            // any noticable visual impact.
-                            flags |= FREE_IMAGE_SAVE_FLAGS.JPEG_PROGRESSIVE;
-
-                            // This seems a little bizarre, but you can put an arbitrary value from 1-100
-                            // for JPEG quality in this bitmask, because all of the enum values are above 128.
-                            // http://forum.openframeworks.cc/t/saveimage-file-parameters/381/2
-                            flags |= (FREE_IMAGE_SAVE_FLAGS)qs.JpegQuality;
-
-                            var img = new FreeImageBitmap(outputBitmap);
-                            img.Save(stream, FREE_IMAGE_FORMAT.FIF_JPEG, flags);
-                        }
-                        else
-                        {
+//                        if (this.UseFreeImage)
+//                        {
+//                            // Use FreeImage.NET to encode jpegs
+//                            // This invokes unmanaged code, but has been used in production already, so is less risky.
+//
+//                            // Turn off chroma subsampling (set ratio 4:4:4)
+//                            // This is the magic flag that makes flat color areas look good.
+//                            // Without it, you get compression artifacts that look especially bad in flat color areas and text.
+//                            var flags = FREE_IMAGE_SAVE_FLAGS.JPEG_SUBSAMPLING_444;
+//
+//                            // Not sure why you wouldn't want to optimize, but this reduces the size significantly without
+//                            // any noticable visual impact.
+//                            flags |= FREE_IMAGE_SAVE_FLAGS.JPEG_PROGRESSIVE;
+//
+//                            // This seems a little bizarre, but you can put an arbitrary value from 1-100
+//                            // for JPEG quality in this bitmask, because all of the enum values are above 128.
+//                            // http://forum.openframeworks.cc/t/saveimage-file-parameters/381/2
+//                            flags |= (FREE_IMAGE_SAVE_FLAGS)qs.JpegQuality;
+//
+//                            var img = new FreeImageBitmap(outputBitmap);
+//                            img.Save(stream, FREE_IMAGE_FORMAT.FIF_JPEG, flags);
+//                        }
+//                        else
+//                        {
                             ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
                             var encoderParameters = new EncoderParameters(1);
                             var encoderParameter = new EncoderParameter(Encoder.Quality, qs.JpegQuality);
                             encoderParameters.Param[0] = encoderParameter;
 
                             outputBitmap.Save(stream, jgpEncoder, encoderParameters);
-                        }
+//                        }
                     }
                     else
                     {

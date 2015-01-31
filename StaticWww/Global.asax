@@ -1,1 +1,2 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="StaticWww.MvcApplication" Language="C#" %>
+﻿<%@ Application Inherits="StaticWww.MvcApplication" %>
+

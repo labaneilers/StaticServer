@@ -23,26 +23,26 @@ namespace StaticWww.Models
                 throw new Exception("s parameter is required");
             }
 
-            //model.Width = queryString.Get("w", 0);
-            //if (model.Width <= 0)
-            //{
-            //    throw new Exception("w parameter is required. This is likely because the image doesn't exist: " + model.Src);
-            //}
-            //if (model.Width > MAX_IMAGE_SIZE)
-            //{
-            //    throw new Exception("w parameter is " + model.Width + ", which larger than the maximum of " + MAX_IMAGE_SIZE + ". " + model.Src);
-            //}
+            model.Width = queryString.Get("w", 0);
+            if (model.Width <= 0)
+            {
+                throw new Exception("w parameter is required. This is likely because the image doesn't exist: " + model.Src);
+            }
+            if (model.Width > MAX_IMAGE_SIZE)
+            {
+                throw new Exception("w parameter is " + model.Width + ", which larger than the maximum of " + MAX_IMAGE_SIZE + ". " + model.Src);
+            }
 
-            //model.Height = queryString.Get("h", 0);
-            //if (model.Height <= 0)
-            //{
-            //    throw new Exception("h parameter is required. This is likely because the image doesn't exist: " + model.Src);
-            //}
+            model.Height = queryString.Get("h", 0);
+            if (model.Height <= 0)
+            {
+                throw new Exception("h parameter is required. This is likely because the image doesn't exist: " + model.Src);
+            }
 
-            //if (model.Height > MAX_IMAGE_SIZE)
-            //{
-            //    throw new Exception("h parameter is " + model.Width + ", which larger than the maximum of " + MAX_IMAGE_SIZE + ". " + model.Src);
-            //}
+            if (model.Height > MAX_IMAGE_SIZE)
+            {
+                throw new Exception("h parameter is " + model.Width + ", which larger than the maximum of " + MAX_IMAGE_SIZE + ". " + model.Src);
+            }
 
             model.JpegQuality = queryString.Get("q", 0);
             if (model.JpegQuality < 0 || model.JpegQuality > 100)

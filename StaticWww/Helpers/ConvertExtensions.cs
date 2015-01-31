@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
+//using System.Drawing;
 using System.Globalization;
 using System.Linq;
 
@@ -616,7 +616,7 @@ namespace StaticWww.Helpers
 			static Conversions()
 			{
 				// custom conversions
-				_converters.Add(typeof(Color), (Converter<Color>) TryParseColor);
+//				_converters.Add(typeof(Color), (Converter<Color>) TryParseColor);
 				_converters.Add(typeof(Guid), (Converter<Guid>) TryParseGuid);
 
 				_converters.Add(typeof(sbyte), (Converter<sbyte>) TryParseSByte);
@@ -683,68 +683,68 @@ namespace StaticWww.Helpers
             }
 
             #region Conversions
-			/// <summary>
-			/// Attempts to parse a color
-			/// </summary>
-			/// <param name="value"></param>
-			/// <param name="color"></param>
-			/// <param name="formatProvider"></param>
-			/// <returns></returns>
-			private static bool TryParseColor(
-				string value,
-				out Color color,
-				IFormatProvider formatProvider)
-			{
-				int argb;
-
-                if (value != null)
-                {
-                    value = value.TrimStart('#');
-                }
-                else
-                {
-                    color = new Color();
-                    return false;
-                }
-
-			    //Identify known color names (i.e. "blue")
-                color = Color.FromName(value);
-                if (color.IsKnownColor)
-                {
-                    return true;
-                }
-
-				if (!int.TryParse(value, NumberStyles.HexNumber, formatProvider, out argb))
-				{
-					color = new Color();
-					return false;
-				}
-
-                if (value.Length == 3)
-                {
-                    value = string.Format("{0}{0}{1}{1}{2}{2}", value[0], value[1], value[2]);
-
-                    if (!int.TryParse(value, NumberStyles.HexNumber, formatProvider, out argb))
-                    {
-                        color = new Color();
-                        return false;
-                    }
-                }
-
-				// If color parameter is only 6 digits long then assume an Alpha value of FF
-				if (value.Length == 6)
-				{
-					argb = argb | unchecked((int) 0xFF000000);
-				}
-				else if (value.Length != 8)
-				{
-					color = new Color();
-					return false;
-				}
-
-				color = Color.FromArgb(argb);
-				return true;
-			}
+//			/// <summary>
+//			/// Attempts to parse a color
+//			/// </summary>
+//			/// <param name="value"></param>
+//			/// <param name="color"></param>
+//			/// <param name="formatProvider"></param>
+//			/// <returns></returns>
+//			private static bool TryParseColor(
+//				string value,
+//				out Color color,
+//				IFormatProvider formatProvider)
+//			{
+//				int argb;
+//
+//                if (value != null)
+//                {
+//                    value = value.TrimStart('#');
+//                }
+//                else
+//                {
+//                    color = new Color();
+//                    return false;
+//                }
+//
+//			    //Identify known color names (i.e. "blue")
+//                color = Color.FromName(value);
+//                if (color.IsKnownColor)
+//                {
+//                    return true;
+//                }
+//
+//				if (!int.TryParse(value, NumberStyles.HexNumber, formatProvider, out argb))
+//				{
+//					color = new Color();
+//					return false;
+//				}
+//
+//                if (value.Length == 3)
+//                {
+//                    value = string.Format("{0}{0}{1}{1}{2}{2}", value[0], value[1], value[2]);
+//
+//                    if (!int.TryParse(value, NumberStyles.HexNumber, formatProvider, out argb))
+//                    {
+//                        color = new Color();
+//                        return false;
+//                    }
+//                }
+//
+//				// If color parameter is only 6 digits long then assume an Alpha value of FF
+//				if (value.Length == 6)
+//				{
+//					argb = argb | unchecked((int) 0xFF000000);
+//				}
+//				else if (value.Length != 8)
+//				{
+//					color = new Color();
+//					return false;
+//				}
+//
+//				color = Color.FromArgb(argb);
+//				return true;
+//			}
 
 			private static bool TryParseGuid(
 				string value,

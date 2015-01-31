@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww", "StaticWww\StaticWww.csproj", "{E4268858-59A1-4C47-8636-925DDF2EFB80}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww.Tests", "StaticWww.Tests\StaticWww.Tests.csproj", "{3C1353AC-AE16-491D-B2A4-C6ED67FCECFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PngLib", "PngLib\PngLib.csproj", "{B15263DD-7F1A-44B8-95FC-189002D5485C}"
@@ -13,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageManipulation", "ImageM
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5B58A6FF-534D-4037-9240-39CD61083ADF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww2", "StaticWww2\StaticWww2.csproj", "{78362B55-2FD6-4EA8-945C-B4CCE959FA5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww", "StaticWww\StaticWww.csproj", "{78362B55-2FD6-4EA8-945C-B4CCE959FA5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
