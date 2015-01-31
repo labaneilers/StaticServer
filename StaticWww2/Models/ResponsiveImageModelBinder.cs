@@ -3,9 +3,9 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.Globalization;
 using System.Web.Mvc;
-using StaticWww.Helpers;
+using StaticWww2.Helpers;
 
-namespace StaticWww.Models
+namespace StaticWww2.Models
 {
     public class ResponsiveImageModelBinder : IModelBinder
     {

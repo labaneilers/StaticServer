@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace StaticWww.Controllers
+namespace StaticWww2.Controllers
 {
     public class HomeController : Controller
     {

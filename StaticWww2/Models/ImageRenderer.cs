@@ -6,7 +6,7 @@ using System.IO;
 using System.Web;
 //using FreeImageAPI;
 
-namespace StaticWww.Models
+namespace StaticWww2.Models
 {
     public class ImageRenderer
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Web.Mvc;
 
-namespace StaticWww.Helpers
+namespace StaticWww2.Helpers
 {
     public class ImageWriterResult : ActionResult
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
-using StaticWww.Helpers;
-using StaticWww.Models;
+using StaticWww2.Helpers;
+using StaticWww2.Models;
 
-namespace StaticWww.Controllers
+namespace StaticWww2.Controllers
 {
     public class ImageController : Controller
     {

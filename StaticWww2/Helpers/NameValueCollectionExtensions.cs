@@ -6,7 +6,7 @@ using System.Text;
 using System.Globalization;
 using System.Linq;
 
-namespace StaticWww.Helpers
+namespace StaticWww2.Helpers
 {
     /// <summary>
     /// Extensions to NameValueCollection

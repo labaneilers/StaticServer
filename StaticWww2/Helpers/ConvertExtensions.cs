@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
-namespace StaticWww.Helpers
+namespace StaticWww2.Helpers
 {
     /// <summary>
     /// Holds extensions for the System.Convert class

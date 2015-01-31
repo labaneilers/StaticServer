@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace StaticWww.Models
+namespace StaticWww2.Models
 {
     /// <summary>
     /// Encodes/decodes querystrings for the ResponsiveImage renderer.
