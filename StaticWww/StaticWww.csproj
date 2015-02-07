@@ -68,6 +68,7 @@
     <Folder Include="Models\" />
     <Folder Include="Scripts\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="Helpers\ConvertExtensions.cs" />
     <Compile Include="Helpers\ImageWriterResult.cs" />
     <Compile Include="Helpers\NameValueCollectionExtensions.cs" />
+    <Compile Include="Helpers\FileGuidMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
