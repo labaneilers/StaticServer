@@ -33,6 +33,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticUrlHelper.cs" />
+    <Compile Include="ManifestFile.cs" />
+    <Compile Include="IManifestFile.cs" />
+    <Compile Include="ManifestEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
