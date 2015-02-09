@@ -4,11 +4,11 @@ using System.Web.Mvc;
 
 namespace StaticWww.Helpers
 {
-    public class ImageWriterResult : ActionResult
+    public class StreamResult : ActionResult
     {
         private readonly Action<Stream> _write;
 
-        public ImageWriterResult(Action<Stream> write)
+        public StreamResult(Action<Stream> write)
         {
             _write = write;
         }

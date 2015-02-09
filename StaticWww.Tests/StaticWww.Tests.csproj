@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Helpers\FileGuidMapTests.cs" />
+    <Compile Include="Helpers\ShortGuidTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

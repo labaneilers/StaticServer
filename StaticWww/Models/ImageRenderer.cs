@@ -4,12 +4,18 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
+using System.Web.Hosting;
 //using FreeImageAPI;
 
 namespace StaticWww.Models
 {
     public class ImageRenderer
     {
+		public ImageRenderer()
+		{
+			this.MapPath = HostingEnvironment.MapPath;
+		}
+
         public bool UseFreeImage { private get; set; }
 
         public void SetResponseHeaders(HttpContextBase context, bool isPng, bool cacheable)

@@ -3,19 +3,33 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Web.Hosting;
 
 namespace StaticWww
 {
-	public class FileGuidMap
+	public class FileGuidMap : IFileGuidMap
 	{
 		private readonly string _physicalRoot;
+		private readonly string _scanVirtualRoot;
 		private readonly ConcurrentDictionary<Guid, string> _files = new ConcurrentDictionary<Guid, string>();
 		private static readonly bool _isWindows = Path.PathSeparator == '\\';
 
-		public FileGuidMap(string physicalRoot)
+		public FileGuidMap(string applicationPhysicalRoot, string scanVirtualRoot)
 		{
-			_physicalRoot = physicalRoot;
+			_scanVirtualRoot = EnsureNoTrailingSeparator(scanVirtualRoot);
+			_physicalRoot = NormalizePhysicalPath(EnsureNoTrailingSeparator(applicationPhysicalRoot));
+
 			this.EnumerateFiles = physicalPath => Directory.EnumerateFiles(physicalPath, "*.*", SearchOption.AllDirectories);
+		}
+
+		private static string EnsureNoTrailingSeparator(string path)
+		{
+			if (path.EndsWith(Path.PathSeparator.ToString()))
+			{
+				return path.Substring(0, path.Length-1);
+			}
+
+			return path;
 		}
 
 		private static string NormalizeVirtualPath(string path)
@@ -45,7 +59,7 @@ namespace StaticWww
 
 		internal string GetPhysicalPath(string virtualPath)
 		{
-			return NormalizePhysicalPath(Path.Combine(_physicalRoot, virtualPath));
+			return NormalizePhysicalPath(_physicalRoot + virtualPath);
 		}
 
 		private static readonly Regex _guidRegex = new Regex(@"\-hc([a-f0-9]{32})", RegexOptions.IgnoreCase);
@@ -53,7 +67,11 @@ namespace StaticWww
 		internal static Guid ExtractGuid(string physicalPath)
 		{
 			Match match = _guidRegex.Match(physicalPath);
-			return new Guid(match.Groups[1].Captures[0].Value);
+			if (match.Success)
+			{
+				return new Guid(match.Groups[1].Captures[0].Value);
+			}
+			return Guid.Empty;
 		}
 
 		private readonly object _lock = new object();
@@ -65,10 +83,13 @@ namespace StaticWww
 		{
 			lock (_lock)
 			{
-				foreach (string physicalPath in this.EnumerateFiles(_physicalRoot))
+				foreach (string physicalPath in this.EnumerateFiles(this.GetPhysicalPath(_scanVirtualRoot)))
 				{
 					Guid guid = ExtractGuid(physicalPath);
-					_files[guid] = GetVirtualPath(physicalPath);
+					if (guid != Guid.Empty)
+					{
+						_files[guid] = GetVirtualPath(physicalPath);
+					}
 				}
 			}
 		}

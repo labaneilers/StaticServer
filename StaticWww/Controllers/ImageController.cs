@@ -17,7 +17,7 @@ namespace StaticWww.Controllers
 
             renderer.SetResponseHeaders(this.HttpContext, false, true);
 
-            return new ImageWriterResult(stream => renderer.WriteImage(model, stream));
+            return new StreamResult(stream => renderer.WriteImage(model, stream));
         }
     }
 }

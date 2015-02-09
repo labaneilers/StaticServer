@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using System;
+using StaticWww.Helpers;
 
 namespace StaticWww.Controllers
 {
@@ -8,5 +10,12 @@ namespace StaticWww.Controllers
         {
             return View();
         }
+
+		public ActionResult ShortGuid(string id)
+		{
+			var guid = new Guid(id);
+			var shortGuid = StaticWww.Helpers.ShortGuid.Encode(guid);
+			return Content(shortGuid);
+		}
     }
 }
