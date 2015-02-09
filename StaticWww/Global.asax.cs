@@ -64,15 +64,20 @@ namespace StaticWww
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();
 
-			var fileGuidMap = new FileGuidMap(Server.MapPath(System.Web.HttpRuntime.AppDomainAppVirtualPath), "/StaticFiles");
-			fileGuidMap.UpdateFiles();
-
-			builder.RegisterInstance(fileGuidMap).As<IFileGuidMap>();
+			RegisterServices(builder);
 
 			// Set the dependency resolver to be Autofac.
 			var container = builder.Build();
 			DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+		}
 
+		private void RegisterServices(ContainerBuilder builder)
+		{
+			var fileGuidMap = new FileGuidMap(Server.MapPath(System.Web.HttpRuntime.AppDomainAppVirtualPath), "/StaticFiles");
+			fileGuidMap.UpdateFiles();
+			fileGuidMap.WatchFiles();
+
+			builder.RegisterInstance(fileGuidMap).As<IFileGuidMap>();
 		}
 	}
 }

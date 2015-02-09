@@ -85,12 +85,17 @@ namespace StaticWww
 			{
 				foreach (string physicalPath in this.EnumerateFiles(this.GetPhysicalPath(_scanVirtualRoot)))
 				{
-					Guid guid = ExtractGuid(physicalPath);
-					if (guid != Guid.Empty)
-					{
-						_files[guid] = GetVirtualPath(physicalPath);
-					}
+					UpdateFile(physicalPath);
 				}
+			}
+		}
+
+		private void UpdateFile(string physicalPath)
+		{
+			Guid guid = ExtractGuid(physicalPath);
+			if (guid != Guid.Empty)
+			{
+				_files[guid] = GetVirtualPath(physicalPath);
 			}
 		}
 
@@ -103,6 +108,19 @@ namespace StaticWww
 			}
 
 			return null;
+		}
+
+		private FileSystemWatcher _watcher;
+
+		public void WatchFiles()
+		{
+			if (_watcher != null)
+			{
+				throw new Exception("WatchFiles() was already called for this FileGuidMap");
+			}
+			_watcher = new FileSystemWatcher(this.GetPhysicalPath(_scanVirtualRoot), "*-hc*.*");
+			_watcher.Created += (sender, e) => this.UpdateFile(e.FullPath);
+			_watcher.EnableRaisingEvents = true;
 		}
 	}
 }
