@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWww", "StaticWww\Stat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWwwHelpers", "StaticWwwHelpers\StaticWwwHelpers.csproj", "{0ECC379B-FCA7-46DC-A454-C1F359CCE3A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticWwwHelpers.Tests", "StaticWwwHelpers.Tests\StaticWwwHelpers.Tests.csproj", "{CAFE75E8-7614-474E-AFDA-645A63143D78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B15263DD-7F1A-44B8-95FC-189002D5485C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAFE75E8-7614-474E-AFDA-645A63143D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAFE75E8-7614-474E-AFDA-645A63143D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAFE75E8-7614-474E-AFDA-645A63143D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAFE75E8-7614-474E-AFDA-645A63143D78}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4268858-59A1-4C47-8636-925DDF2EFB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
