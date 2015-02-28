@@ -43,6 +43,10 @@
     <Compile Include="ManifestEntryTree.cs" />
     <Compile Include="IErrorReporter.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="LocalizedManifestFile.cs" />
+    <Compile Include="LocalizedManifestLookupResult.cs" />
+    <Compile Include="VirtualPathHelper.cs" />
+    <Compile Include="ICultureConfiguration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

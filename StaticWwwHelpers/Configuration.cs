@@ -19,10 +19,14 @@ namespace StaticWwwHelpers
 
 		public static IErrorReporter ErrorReporter { get; set; }
 
+		public static ICultureConfiguration CultureConfiguration { get; set; }
+
 		static Configuration()
 		{
 			ErrorReporter = new DefaultErrorReporter();
 		}
+
+
 	}
 }
 
