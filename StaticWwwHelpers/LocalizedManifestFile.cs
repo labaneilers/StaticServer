@@ -11,7 +11,7 @@ namespace StaticWwwHelpers
 	/// This is governed by the Language domain data class's inheritance rules,
 	/// and the directory names are defined in the domain data as well.
 	/// </summary>
-	public class LocalizedManifestFile
+	public class LocalizedManifestFile : ILocalizedManifestFile
 	{
 		// Important: Do not use Sadie to inject request context properties (i.e. LanguageId)
 		// The FileMapper may be used across sessions

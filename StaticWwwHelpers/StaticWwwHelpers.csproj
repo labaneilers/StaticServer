@@ -47,6 +47,7 @@
     <Compile Include="LocalizedManifestLookupResult.cs" />
     <Compile Include="VirtualPathHelper.cs" />
     <Compile Include="ICultureConfiguration.cs" />
+    <Compile Include="ILocalizedManifestFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
