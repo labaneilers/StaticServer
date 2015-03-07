@@ -208,7 +208,7 @@ namespace StaticWwwHelpers
 					throw new Exception("No US directory found for path: " + virtualPath);
 				}
 
-				return new LocalizedManifestLookupResult(false, virtualPath, this.RootVirtualDirectory + lastPathFromWwwDir.Path, CultureInfo.DefaultThreadCurrentCulture, Guid.Empty);
+				return new LocalizedManifestLookupResult(false, virtualPath, this.RootVirtualDirectory + lastPathFromWwwDir.Path, CultureInfo.GetCultureInfo("en-US"), Guid.Empty);
 			}
 
 			return null;

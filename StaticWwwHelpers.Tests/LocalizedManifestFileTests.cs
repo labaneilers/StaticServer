@@ -84,6 +84,10 @@ namespace StaticWwwHelpers.Tests
 				CultureData data;
 				if (_cultures.TryGetValue(cultureInfo.Name, out data))
 				{
+					if (data.Parent == null)
+					{
+						return null;
+					}
 					return data.Parent.CultureInfo;
 				}
 				return null;
@@ -119,7 +123,7 @@ namespace StaticWwwHelpers.Tests
 			config.Add("en-US", "www", null);
 			config.Add("fr-FR", "www.fr", "en-US");
 			config.Add("fr-BE", "www.be", "fr-FR");
-			config.Add("fr-CA", "www.fr.ca", "fr-FR");
+			config.Add("fr-CA", "www.ca.fr", "fr-FR");
 			config.Add("de-DE", "www.de", "en-US");
 
 			Configuration.CultureConfiguration = config;
@@ -141,11 +145,12 @@ namespace StaticWwwHelpers.Tests
 		{
 			LocalizedManifestLookupResult result = GetMapper().ResolvePath("/merch/abc/foo.png", CultureInfo.GetCultureInfo("fr-CA"), false);
 
+			// TODO: I think this was wrong in the original test. Its fixed, but it should be retested in VP.Common.Web
 			Assert.IsTrue(result.Found);
-			Assert.AreEqual("/merch/www.fr/abc/foo-hca6836c539dd87129026ae2a85e4e43f5.png", result.TranslatedVirtualPath);
+			Assert.AreEqual("/merch/www.ca.fr/abc/foo-hca6836c539dd87129026ae2a85e4e43f6.png", result.TranslatedVirtualPath);
 			Assert.AreEqual("/merch/abc/foo.png", result.VirtualPath);
-			Assert.AreEqual(Guid.Parse("a6836c539dd87129026ae2a85e4e43f5"), result.VersionId);
-			Assert.AreEqual(CultureInfo.GetCultureInfo("fr-FR"), result.CultureInfo);
+			Assert.AreEqual(Guid.Parse("a6836c539dd87129026ae2a85e4e43f6"), result.VersionId);
+			Assert.AreEqual(CultureInfo.GetCultureInfo("fr-CA"), result.CultureInfo);
 		}
 
 		[Test]
